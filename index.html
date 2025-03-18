@@ -1,100 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Content Page</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Benzonium v1.5</title>
     <style>
-        body {
-            background: #222;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        .navbar {
-            display: flex;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-        }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin: 0 20px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .navbar a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
-        .block {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: left;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .block:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
-        h1 {
-            color: red;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
+      body {
+        background: linear-gradient(to bottom, #00ccff, #00ccff);
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      .navbar {
+        display: flex;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 15px;
+        border-radius: 10px;
+        position: relative;
+        z-index: 10;
+      }
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        margin: 0 20px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .navbar a:hover {
+        text-decoration: underline;
+      }
+      .container {
+        margin-top: 50px;
+        position: relative;
+        z-index: 10;
+      }
+      h1 {
+        color: rgb(255, 255, 255);
+      }
 
-    <h1>Content Page</h1>
+      /* Dots */
+      .dot {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        background-color: white;
+        border-radius: 50%;
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Benzonuim v1.5</h1>
 
     <div class="navbar">
-        <a href="index.html">Home</a>
-        <a href="#">Bookmarklets</a>
-        <a href="#">About</a>
-        <a href="#">Suggestions</a>
+      <a href="#">Home</a>
+      <a href="#">Bookmarklets</a>
+      <a href="#">About</a>
+      <a href="#">Suggestions</a>
     </div>
 
-    <div class="container" id="content">
-        <!-- JavaScript will generate 50 clickable blocks here -->
+    <div class="container">
+      <h2></h2>
+      <p></p>
     </div>
 
     <script>
-        // Base URL for your GitHub Pages
-        const baseURL = "https://benzxy.github.io/Benzonium/";
+      const numDots = 50;
+      const dots = [];
 
-        function createContentBlocks() {
-            let container = document.getElementById("content");
-            for (let i = 1; i <= 50; i++) {
-                let block = document.createElement("div");
-                block.classList.add("block");
+      function createDots() {
+        for (let i = 0; i < numDots; i++) {
+          let dot = document.createElement("div");
+          dot.classList.add("dot");
+          document.body.appendChild(dot);
 
-                let pageURL = `${baseURL}page${i}.html`;
+          dot.style.left = Math.random() * window.innerWidth + "px";
+          dot.style.top = Math.random() * window.innerHeight + "px";
 
-                block.innerHTML = `<h3>Block ${i}</h3><p><a href="${pageURL}" target="_blank">${pageURL}</a></p>`;
-                
-                // Redirect to the specific GitHub Pages URL when clicked
-                block.onclick = function() {
-                    window.location.href = pageURL;
-                };
-                
-                container.appendChild(block);
-            }
+          let speedX = (Math.random() - 0.5) * 2;
+          let speedY = (Math.random() - 0.5) * 2;
+
+          dots.push({ element: dot, speedX, speedY });
         }
+      }
 
-        createContentBlocks();
+      function animateDots() {
+        dots.forEach((dot) => {
+          let rect = dot.element.getBoundingClientRect();
+
+          if (rect.left <= 0 || rect.right >= window.innerWidth) {
+            dot.speedX *= -1;
+          }
+          if (rect.top <= 0 || rect.bottom >= window.innerHeight) {
+            dot.speedY *= -1;
+          }
+
+          dot.element.style.left = rect.left + dot.speedX + "px";
+          dot.element.style.top = rect.top + dot.speedY + "px";
+        });
+
+        requestAnimationFrame(animateDots);
+      }
+
+      createDots();
+      animateDots();
     </script>
-
-</body>
+  </body>
 </html>
